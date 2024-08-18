@@ -417,8 +417,8 @@
       ]
     },
     "D:\\WWW\\Yazilim\\solidity\\zk-challenge\\contracts\\SupplyChainTracking.sol": {
-      "lastModificationDate": 1723988099040,
-      "contentHash": "c9febb01fe8c547ad1f64ecff357c86a",
+      "lastModificationDate": 1724004948731,
+      "contentHash": "77a8efa4e95be44006418e19d59b0231",
       "sourceName": "contracts/SupplyChainTracking.sol",
       "solcConfig": {
         "version": "0.8.24",

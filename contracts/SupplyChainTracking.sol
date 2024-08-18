@@ -17,6 +17,9 @@ contract SupplyChainTracking {
     event ProductTransferred(uint256 productId, string newLocation, string status, address transferredBy);
 
     function addProduct(string memory _name, string memory _initialLocation) public {
+        require(bytes(_name).length > 0, "Invalid product name");
+        require(bytes(_initialLocation).length > 0, "Invalid location");
+
         productCount++;
         products[productCount] = Product({
             name: _name,
@@ -31,8 +34,16 @@ contract SupplyChainTracking {
 
     function updateLocation(uint256 _productId, string memory _newLocation, string memory _status) public {
         require(_productId > 0 && _productId <= productCount, "Product does not exist");
-        
+
         Product storage product = products[_productId];
+
+        // Aynı konuma ve aynı duruma geri dönmeyi engelleme
+        require(
+            keccak256(bytes(product.currentLocation)) != keccak256(bytes(_newLocation)) || 
+            keccak256(bytes(product.status)) != keccak256(bytes(_status)),
+            "Cannot revert to previous state"
+        );
+
         product.currentLocation = _newLocation;
         product.status = _status;
 
