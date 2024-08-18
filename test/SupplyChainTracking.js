@@ -138,5 +138,37 @@ describe("SupplyChainTracking", function () {
             expect(product1[2]).to.equal(owner.address);
             expect(product2[2]).to.equal(addr1.address);
         });
+
+        it("Should revert if attempting to update without adding a product", async function () {
+            await expect(supplyChainTracking.updateLocation(1, "Factory", "Manufactured")).to.be.revertedWith("Product does not exist");
+        });
+
+        it("Should allow adding products with the same name", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+            await expect(supplyChainTracking.addProduct("Laptop", "Factory")).to.not.be.reverted;
+        });        
+
+        it("Should not change other details when updating only the location", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+
+            await supplyChainTracking.updateLocation(1, "Warehouse", "In Transit");
+
+            const product = await supplyChainTracking.getProduct(1);
+            expect(product[0]).to.equal("Laptop");
+            expect(product[2]).to.equal(owner.address);
+        });
+
+        it("Should correctly handle a large number of products", async function () {
+            for (let i = 0; i < 100; i++) {
+                await supplyChainTracking.addProduct(`Product ${i}`, "Factory");
+            }
+
+            expect(await supplyChainTracking.productCount()).to.equal(100);
+
+            for (let i = 1; i <= 100; i++) {
+                const product = await supplyChainTracking.getProduct(i);
+                expect(product[0]).to.equal(`Product ${i-1}`);
+            }
+        });
     });
 });
