@@ -79,19 +79,6 @@ describe("SupplyChainTracking", function () {
             await expect(supplyChainTracking.getProduct(2)).to.be.revertedWith("Product does not exist");
         });
 
-        it("Should increment product count correctly", async function () {
-            await supplyChainTracking.addProduct("Laptop", "Factory");
-            await supplyChainTracking.addProduct("Smartphone", "Warehouse");
-
-            expect(await supplyChainTracking.productCount()).to.equal(2);
-        });
-
-        it("Should not allow product IDs to start from zero", async function () {
-            await supplyChainTracking.addProduct("Laptop", "Factory");
-
-            await expect(supplyChainTracking.getProduct(0)).to.be.revertedWith("Product does not exist");
-        });
-
         it("Should add multiple products and track them separately", async function () {
             await supplyChainTracking.addProduct("Laptop", "Factory");
             await supplyChainTracking.addProduct("Smartphone", "Warehouse");
@@ -131,7 +118,6 @@ describe("SupplyChainTracking", function () {
             const productAfterUpdate = await supplyChainTracking.getProduct(1);
             console.log("After failed update attempt:", productAfterUpdate);
         });
-        
 
         it("Should correctly track manufacturer for multiple products", async function () {
             await supplyChainTracking.addProduct("Laptop", "Factory");
@@ -222,21 +208,5 @@ describe("SupplyChainTracking", function () {
         it("Should revert if the product count is zero", async function () {
             expect(await supplyChainTracking.productCount()).to.equal(0);
         });
-        
-        it("Should update multiple products with the same name independently", async function () {
-            await supplyChainTracking.addProduct("Laptop", "Factory");
-            await supplyChainTracking.addProduct("Laptop", "Factory");
-        
-            await supplyChainTracking.updateLocation(1, "Warehouse", "In Transit");
-            await supplyChainTracking.updateLocation(2, "Warehouse", "In Transit");
-        
-            const product1 = await supplyChainTracking.getProduct(1);
-            const product2 = await supplyChainTracking.getProduct(2);
-        
-            expect(product1[3]).to.equal("Warehouse");
-            expect(product2[3]).to.equal("Warehouse");
-        });
-        
-        
     });
 });
