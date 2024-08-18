@@ -91,5 +91,52 @@ describe("SupplyChainTracking", function () {
 
             await expect(supplyChainTracking.getProduct(0)).to.be.revertedWith("Product does not exist");
         });
+
+        it("Should add multiple products and track them separately", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+            await supplyChainTracking.addProduct("Smartphone", "Warehouse");
+
+            const product1 = await supplyChainTracking.getProduct(1);
+            const product2 = await supplyChainTracking.getProduct(2);
+
+            expect(product1[0]).to.equal("Laptop");
+            expect(product1[3]).to.equal("Factory");
+
+            expect(product2[0]).to.equal("Smartphone");
+            expect(product2[3]).to.equal("Warehouse");
+        });
+
+        it("Should maintain product status if not updated", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+
+            await supplyChainTracking.updateLocation(1, "Warehouse", "In Transit");
+
+            await supplyChainTracking.updateLocation(1, "Retail Store", "In Transit"); // Status remains "In Transit"
+
+            const product = await supplyChainTracking.getProduct(1);
+            expect(product[3]).to.equal("Retail Store");
+            expect(product[4]).to.equal("In Transit");
+        });
+
+        it("Should handle update to the same location and status", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+
+            await supplyChainTracking.updateLocation(1, "Factory", "Manufactured");
+
+            const product = await supplyChainTracking.getProduct(1);
+            expect(product[3]).to.equal("Factory");
+            expect(product[4]).to.equal("Manufactured");
+        });
+
+        it("Should correctly track manufacturer for multiple products", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+            await supplyChainTracking.connect(addr1).addProduct("Smartphone", "Warehouse");
+
+            const product1 = await supplyChainTracking.getProduct(1);
+            const product2 = await supplyChainTracking.getProduct(2);
+
+            expect(product1[2]).to.equal(owner.address);
+            expect(product2[2]).to.equal(addr1.address);
+        });
     });
 });
