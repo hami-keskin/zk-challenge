@@ -222,5 +222,21 @@ describe("SupplyChainTracking", function () {
         it("Should revert if the product count is zero", async function () {
             expect(await supplyChainTracking.productCount()).to.equal(0);
         });
+        
+        it("Should update multiple products with the same name independently", async function () {
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+            await supplyChainTracking.addProduct("Laptop", "Factory");
+        
+            await supplyChainTracking.updateLocation(1, "Warehouse", "In Transit");
+            await supplyChainTracking.updateLocation(2, "Warehouse", "In Transit");
+        
+            const product1 = await supplyChainTracking.getProduct(1);
+            const product2 = await supplyChainTracking.getProduct(2);
+        
+            expect(product1[3]).to.equal("Warehouse");
+            expect(product2[3]).to.equal("Warehouse");
+        });
+        
+        
     });
 });
