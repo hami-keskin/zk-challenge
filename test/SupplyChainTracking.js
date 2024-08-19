@@ -20,8 +20,9 @@ describe("SupplyChainTracking", function () {
             expect(product[0]).to.equal("Laptop");
             expect(product[1]).to.equal(1);
             expect(product[2]).to.equal(owner.address);
-            expect(product[3]).to.equal("Factory");
-            expect(product[4]).to.equal("Manufactured");
+            expect(product[3]).to.equal(owner.address);
+            expect(product[4]).to.equal("Factory");
+            expect(product[5]).to.equal("Manufactured");
         });
 
         it("Should emit an event when a product is added", async function () {
@@ -36,8 +37,8 @@ describe("SupplyChainTracking", function () {
             await supplyChainTracking.updateLocation(1, "Warehouse", "In Transit");
 
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Warehouse");
-            expect(product[4]).to.equal("In Transit");
+            expect(product[4]).to.equal("Warehouse");
+            expect(product[5]).to.equal("In Transit");
         });
 
         it("Should emit an event when product location and status are updated", async function () {
@@ -50,18 +51,18 @@ describe("SupplyChainTracking", function () {
 
         it("Should fail to update a non-existent product", async function () {
             await expect(
-                supplyChainTracking.updateLocation(2, "Warehouse", "In Transit")
+                supplyChainTracking.updateLocation(999, "Warehouse", "In Transit")
             ).to.be.revertedWith("Product does not exist");
         });
 
         it("Should allow another address to update a product's location", async function () {
             await supplyChainTracking.addProduct("Laptop", "Factory");
-
+        
             await supplyChainTracking.connect(addr1).updateLocation(1, "Warehouse", "In Transit");
-
+        
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Warehouse");
-            expect(product[4]).to.equal("In Transit");
+            expect(product[4]).to.equal("Warehouse");
+            expect(product[5]).to.equal("In Transit");
         });
 
         it("Should retrieve product details", async function () {
@@ -71,8 +72,9 @@ describe("SupplyChainTracking", function () {
             expect(product[0]).to.equal("Laptop");
             expect(product[1]).to.equal(1);
             expect(product[2]).to.equal(owner.address);
-            expect(product[3]).to.equal("Factory");
-            expect(product[4]).to.equal("Manufactured");
+            expect(product[3]).to.equal(owner.address);
+            expect(product[4]).to.equal("Factory");
+            expect(product[5]).to.equal("Manufactured");
         });
 
         it("Should revert when retrieving a non-existent product", async function () {
@@ -87,10 +89,10 @@ describe("SupplyChainTracking", function () {
             const product2 = await supplyChainTracking.getProduct(2);
 
             expect(product1[0]).to.equal("Laptop");
-            expect(product1[3]).to.equal("Factory");
+            expect(product1[4]).to.equal("Factory");
 
             expect(product2[0]).to.equal("Smartphone");
-            expect(product2[3]).to.equal("Warehouse");
+            expect(product2[4]).to.equal("Warehouse");
         });
 
         it("Should maintain product status if not updated", async function () {
@@ -101,22 +103,15 @@ describe("SupplyChainTracking", function () {
             await supplyChainTracking.updateLocation(1, "Retail Store", "In Transit"); // Status remains "In Transit"
 
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Retail Store");
-            expect(product[4]).to.equal("In Transit");
+            expect(product[4]).to.equal("Retail Store");
+            expect(product[5]).to.equal("In Transit");
         });
 
         it("Should handle update to the same location and status", async function () {
             await supplyChainTracking.addProduct("Laptop", "Factory");
         
-            const productBeforeUpdate = await supplyChainTracking.getProduct(1);
-            console.log("Before update:", productBeforeUpdate);
-        
-            // Trying to update with the same location and status
             await expect(supplyChainTracking.updateLocation(1, "Factory", "Manufactured"))
                 .to.be.revertedWith("Cannot revert to previous state");
-        
-            const productAfterUpdate = await supplyChainTracking.getProduct(1);
-            console.log("After failed update attempt:", productAfterUpdate);
         });
 
         it("Should correctly track manufacturer for multiple products", async function () {
@@ -131,7 +126,7 @@ describe("SupplyChainTracking", function () {
         });
 
         it("Should revert if attempting to update without adding a product", async function () {
-            await expect(supplyChainTracking.updateLocation(1, "Factory", "Manufactured")).to.be.revertedWith("Product does not exist");
+            await expect(supplyChainTracking.updateLocation(999, "Factory", "Manufactured")).to.be.revertedWith("Product does not exist");
         });
 
         it("Should allow adding products with the same name", async function () {
@@ -178,19 +173,24 @@ describe("SupplyChainTracking", function () {
             await supplyChainTracking.updateLocation(1, "Customer", "Delivered");
 
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Customer");
-            expect(product[4]).to.equal("Delivered");
+            expect(product[4]).to.equal("Customer");
+            expect(product[5]).to.equal("Delivered");
         });
 
         it("Should allow different addresses to update the same product", async function () {
+            // Add a product
             await supplyChainTracking.addProduct("Laptop", "Factory");
-
+        
+            // Let addr1 update the location
             await supplyChainTracking.connect(addr1).updateLocation(1, "Warehouse", "In Transit");
+        
+            // Let addr2 update the location
             await supplyChainTracking.connect(addr2).updateLocation(1, "Retail Store", "Delivered");
-
+        
+            // Verify the final location and status
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Retail Store");
-            expect(product[4]).to.equal("Delivered");
+            expect(product[4]).to.equal("Retail Store");
+            expect(product[5]).to.equal("Delivered");
         });
 
         it("Should handle large scale updates on the same product", async function () {
@@ -201,8 +201,8 @@ describe("SupplyChainTracking", function () {
             }
 
             const product = await supplyChainTracking.getProduct(1);
-            expect(product[3]).to.equal("Location 9");
-            expect(product[4]).to.equal("Status 9");
+            expect(product[4]).to.equal("Location 9");
+            expect(product[5]).to.equal("Status 9");
         });
 
         it("Should revert if the product count is zero", async function () {

@@ -6,11 +6,20 @@ contract SupplyChainTracking {
         string name;
         uint256 productId;
         address manufacturer;
+        address owner;
         string currentLocation;
         string status;
+        uint256 timestamp;
+    }
+
+    struct ProductHistory {
+        string location;
+        string status;
+        uint256 timestamp;
     }
 
     mapping(uint256 => Product) public products;
+    mapping(uint256 => ProductHistory[]) public productHistories;
     uint256 public productCount;
 
     event ProductAdded(uint256 productId, string name, address manufacturer);
@@ -25,9 +34,17 @@ contract SupplyChainTracking {
             name: _name,
             productId: productCount,
             manufacturer: msg.sender,
+            owner: msg.sender,
             currentLocation: _initialLocation,
-            status: "Manufactured"
+            status: "Manufactured",
+            timestamp: block.timestamp
         });
+
+        productHistories[productCount].push(ProductHistory({
+            location: _initialLocation,
+            status: "Manufactured",
+            timestamp: block.timestamp
+        }));
 
         emit ProductAdded(productCount, _name, msg.sender);
     }
@@ -37,7 +54,6 @@ contract SupplyChainTracking {
 
         Product storage product = products[_productId];
 
-        // Aynı konuma ve aynı duruma geri dönmeyi engelleme
         require(
             keccak256(bytes(product.currentLocation)) != keccak256(bytes(_newLocation)) || 
             keccak256(bytes(product.status)) != keccak256(bytes(_status)),
@@ -46,11 +62,18 @@ contract SupplyChainTracking {
 
         product.currentLocation = _newLocation;
         product.status = _status;
+        product.timestamp = block.timestamp;
+
+        productHistories[_productId].push(ProductHistory({
+            location: _newLocation,
+            status: _status,
+            timestamp: block.timestamp
+        }));
 
         emit ProductTransferred(_productId, _newLocation, _status, msg.sender);
     }
 
-    function getProduct(uint256 _productId) public view returns (string memory, uint256, address, string memory, string memory) {
+    function getProduct(uint256 _productId) public view returns (string memory, uint256, address, address, string memory, string memory, uint256) {
         require(_productId > 0 && _productId <= productCount, "Product does not exist");
 
         Product memory product = products[_productId];
@@ -58,8 +81,15 @@ contract SupplyChainTracking {
             product.name,
             product.productId,
             product.manufacturer,
+            product.owner,
             product.currentLocation,
-            product.status
+            product.status,
+            product.timestamp
         );
+    }
+
+    function getProductHistory(uint256 _productId) public view returns (ProductHistory[] memory) {
+        require(_productId > 0 && _productId <= productCount, "Product does not exist");
+        return productHistories[_productId];
     }
 }
