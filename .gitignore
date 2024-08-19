@@ -3214,3 +3214,5 @@ node_modules/ws/README.md
 /node_modules
 /artifacts
 /artifacts
+/frontend/node_modules
+/node_modules
