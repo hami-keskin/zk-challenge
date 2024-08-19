@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
+import { BrowserProvider, Contract } from 'ethers';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap';
 import { contractAddress, contractABI } from './contractConfig'; // contractConfig dosyasını içe aktarın
@@ -16,9 +16,9 @@ function App() {
 
   useEffect(() => {
     const loadProvider = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, contractABI, signer);
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new Contract(contractAddress, contractABI, signer);
       
       setProvider(provider);
       setSigner(signer);
