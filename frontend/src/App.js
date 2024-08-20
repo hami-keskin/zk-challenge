@@ -16,6 +16,7 @@ function App() {
   const [productInfo, setProductInfo] = useState(null);
   const [productHistory, setProductHistory] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
+  const [allProducts, setAllProducts] = useState([]);
 
   useEffect(() => {
     const loadProvider = async () => {
@@ -50,12 +51,12 @@ function App() {
       const product = await contract.getProduct(productId);
       setProductInfo({
         name: product[0],
-        productId: product[1].toString(), // BigInt to string conversion
+        productId: product[1].toString(),
         manufacturer: product[2],
         owner: product[3],
         currentLocation: product[4],
         status: product[5],
-        timestamp: new Date(Number(product[6].toString()) * 1000).toLocaleString() // BigInt to string and timestamp conversion
+        timestamp: new Date(Number(product[6].toString()) * 1000).toLocaleString()
       });
       setStatusMessage(`Product ${productId} fetched successfully!`);
     } catch (error) {
@@ -79,12 +80,38 @@ function App() {
       const formattedHistory = history.map(item => ({
         location: item.location,
         status: item.status,
-        timestamp: new Date(Number(item.timestamp.toString()) * 1000).toLocaleString() // BigInt to string and timestamp conversion
+        timestamp: new Date(Number(item.timestamp.toString()) * 1000).toLocaleString()
       }));
       setProductHistory(formattedHistory);
       setStatusMessage(`Product history for ${productId} fetched successfully!`);
     } catch (error) {
       setStatusMessage("Error fetching product history.");
+    }
+  };
+
+  // Tüm ürünleri listeleyen fonksiyon
+  const fetchAllProducts = async () => {
+    try {
+      const productCount = await contract.productCount(); // Toplam ürün sayısını alıyoruz
+      let products = [];
+      
+      for (let i = 1; i <= productCount; i++) {
+        const product = await contract.getProduct(i);
+        products.push({
+          name: product[0],
+          productId: product[1].toString(),
+          manufacturer: product[2],
+          owner: product[3],
+          currentLocation: product[4],
+          status: product[5],
+          timestamp: new Date(Number(product[6].toString()) * 1000).toLocaleString()
+        });
+      }
+
+      setAllProducts(products);
+      setStatusMessage("All products fetched successfully!");
+    } catch (error) {
+      setStatusMessage("Error fetching products.");
     }
   };
 
@@ -201,6 +228,35 @@ function App() {
           </Card>
         </Col>
       </Row>
+
+      <Row className="mb-4">
+        <Col>
+          <Card>
+            <Card.Body>
+              <Card.Title>All Products</Card.Title>
+              <Button variant="primary" onClick={fetchAllProducts}>Fetch All Products</Button>
+              {allProducts.length > 0 && (
+                <div className="mt-3">
+                  <ul>
+                    {allProducts.map((product, index) => (
+                      <li key={index}>
+                        <p><strong>Name:</strong> {product.name}</p>
+                        <p><strong>Product ID:</strong> {product.productId}</p>
+                        <p><strong>Manufacturer:</strong> {product.manufacturer}</p>
+                        <p><strong>Owner:</strong> {product.owner}</p>
+                        <p><strong>Current Location:</strong> {product.currentLocation}</p>
+                        <p><strong>Status:</strong> {product.status}</p>
+                        <p><strong>Timestamp:</strong> {product.timestamp}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
     </Container>
   );
 }
