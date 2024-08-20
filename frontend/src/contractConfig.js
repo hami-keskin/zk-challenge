@@ -1,6 +1,6 @@
 // src/contractConfig.js
 
-export const contractAddress = "0xB124C247baE73472e0Bd1F89360d8e62DcfBF1d7"; // Kontrat adresinizi buraya ekleyin
+export const contractAddress = "0x36B929a1EEA0C95FbB7F789734019A6E2D3B885e"; // Kontrat adresinizi buraya ekleyin
 
 export const contractABI = [
 	{
@@ -103,6 +103,11 @@ export const contractABI = [
 				"type": "address"
 			},
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "",
 				"type": "string"
@@ -111,6 +116,47 @@ export const contractABI = [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_productId",
+				"type": "uint256"
+			}
+		],
+		"name": "getProductHistory",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "location",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "status",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "timestamp",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct SupplyChainTracking.ProductHistory[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -123,6 +169,40 @@ export const contractABI = [
 			{
 				"internalType": "uint256",
 				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "productHistories",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "location",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "status",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
 				"type": "uint256"
 			}
 		],
@@ -155,6 +235,11 @@ export const contractABI = [
 				"type": "address"
 			},
 			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
 				"internalType": "string",
 				"name": "currentLocation",
 				"type": "string"
@@ -163,6 +248,11 @@ export const contractABI = [
 				"internalType": "string",
 				"name": "status",
 				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "timestamp",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
