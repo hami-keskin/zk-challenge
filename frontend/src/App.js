@@ -89,7 +89,6 @@ function App() {
     }
   };
 
-  // Tüm ürünleri listeleyen fonksiyon
   const fetchAllProducts = async () => {
     try {
       const productCount = await contract.productCount(); // Toplam ürün sayısını alıyoruz
@@ -237,19 +236,16 @@ function App() {
               <Button variant="primary" onClick={fetchAllProducts}>Fetch All Products</Button>
               {allProducts.length > 0 && (
                 <div className="mt-3">
-                  <ul>
-                    {allProducts.map((product, index) => (
-                      <li key={index}>
-                        <p><strong>Name:</strong> {product.name}</p>
-                        <p><strong>Product ID:</strong> {product.productId}</p>
-                        <p><strong>Manufacturer:</strong> {product.manufacturer}</p>
-                        <p><strong>Owner:</strong> {product.owner}</p>
-                        <p><strong>Current Location:</strong> {product.currentLocation}</p>
-                        <p><strong>Status:</strong> {product.status}</p>
-                        <p><strong>Timestamp:</strong> {product.timestamp}</p>
-                      </li>
-                    ))}
-                  </ul>
+                  {allProducts.map((product, index) => (
+                    <div key={index} className="d-flex justify-content-between align-items-center border-bottom py-2">
+                      <div><strong>ID:</strong> {product.productId}</div>
+                      <div><strong>Name:</strong> {product.name}</div>
+                      <div><strong>Manufacturer:</strong> {product.manufacturer}</div>
+                      <div><strong>Location:</strong> {product.currentLocation}</div>
+                      <div><strong>Status:</strong> {product.status}</div>
+                      <div><strong>Timestamp:</strong> {product.timestamp}</div>
+                    </div>
+                  ))}
                 </div>
               )}
             </Card.Body>
