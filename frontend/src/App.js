@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserProvider, Contract } from 'ethers';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Alert, Card, Table } from 'react-bootstrap';
 import { contractAddress, contractABI } from './contractConfig';
 
 function App() {
@@ -235,18 +235,32 @@ function App() {
               <Card.Title>All Products</Card.Title>
               <Button variant="primary" onClick={fetchAllProducts}>Fetch All Products</Button>
               {allProducts.length > 0 && (
-                <div className="mt-3">
-                  {allProducts.map((product, index) => (
-                    <div key={index} className="d-flex justify-content-between align-items-center border-bottom py-2">
-                      <div><strong>ID:</strong> {product.productId}</div>
-                      <div><strong>Name:</strong> {product.name}</div>
-                      <div><strong>Manufacturer:</strong> {product.manufacturer}</div>
-                      <div><strong>Location:</strong> {product.currentLocation}</div>
-                      <div><strong>Status:</strong> {product.status}</div>
-                      <div><strong>Timestamp:</strong> {product.timestamp}</div>
-                    </div>
-                  ))}
-                </div>
+                <Table striped bordered hover className="mt-3">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Manufacturer</th>
+                      <th>Owner</th>
+                      <th>Location</th>
+                      <th>Status</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allProducts.map((product, index) => (
+                      <tr key={index}>
+                        <td>{product.productId}</td>
+                        <td>{product.name}</td>
+                        <td>{product.manufacturer}</td>
+                        <td>{product.owner}</td>
+                        <td>{product.currentLocation}</td>
+                        <td>{product.status}</td>
+                        <td>{product.timestamp}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
               )}
             </Card.Body>
           </Card>
