@@ -23,14 +23,25 @@ BlockSupplyTrack ile tedarik zinciri yönetimini blockchain teknolojisi ile devr
      - `getProductHistory(uint256 _productId)`: Bir ürünün geçmişini almak için.
    - **Event Tetiklemeleri:** İlgili işlemlerde `ProductAdded` ve `ProductTransferred` event'lerini tetikle.
 
-2. **Ön Yüz Geliştirme:**
-   - **React.js Entegrasyonu:** React.js kullanarak kullanıcı arayüzü geliştirildi.
-   - **Kullanıcı Girdileri:** Ürün ekleme ve ürün lokasyonunu güncelleme için formlar oluşturuldu.
-   - **Veri Gösterimi:** Ürün detaylarını, geçmişini ve kayıtlı tüm ürünleri görüntülendi.
+2. **Frontend Geliştirme:**
+   - **React.js Entegrasyonu:** React.js kullanarak kullanıcı arayüzü geliştirildi. Bu arayüz, kullanıcıların akıllı kontrat ile etkileşim kurmasına olanak tanır. MetaMask gibi bir cüzdan ile bağlantı sağlanarak blockchain'deki verilere erişim sağlanır.
+   - **Kullanıcı Girdileri:** Ürün ekleme ve ürün lokasyonunu güncelleme için formlar oluşturuldu. Kullanıcılar, ürün bilgilerini girip bu bilgileri blockchain'e kaydedebilir.
+   - **Veri Gösterimi:** Ürün detaylarını, geçmişini ve kayıtlı tüm ürünleri görüntüleme imkanı sunuldu. Tüm ürünler tablo şeklinde listelenir ve her bir ürünün adı, ID'si, üreticisi, sahibi, mevcut lokasyonu, durumu ve zaman damgası gösterilir.
 
-3. **Dağıtım:**
-   - **Test Dağıtımı:** Akıllı kontratı Scroll Testnet'e dağıt.
-   - **Frontend Dağıtımı:** React uygulamasını Vercel veya GitHub Pages gibi bir platformda barındır.
+3. **Test Geliştirme:**
+   - Proje kapsamında, geliştirilen akıllı kontratın işlevselliğini ve güvenilirliğini sağlamak için kapsamlı testler yazıldı. Bu testler, farklı senaryolar altında kontratın doğru çalışıp çalışmadığını doğrulamak amacıyla geliştirilmiştir.
+   - **Test Senaryoları:**
+     - **Ürün Ekleme Testi:** Yeni bir ürün eklendiğinde, ürünün doğru şekilde kaydedildiğini doğrulayan ve event tetiklenip tetiklenmediğini kontrol eden testler.
+     - **Ürün Güncelleme Testi:** Ürünün lokasyonu ve durumunun güncellenmesini ve güncelleme sırasında event'in doğru şekilde emit edilip edilmediğini doğrulayan testler.
+     - **Geçersiz İşlemler Testi:** Var olmayan bir ürünü güncellemeye çalışmanın ve aynı lokasyon ile duruma sahip bir ürünü güncellemeye çalışmanın başarısız olacağını doğrulayan testler.
+     - **Çoklu Ürün Yönetimi Testi:** Birden fazla ürün ekleyip, her birini ayrı ayrı izleyebilme kapasitesini ve doğru üretici adresleriyle kaydedildiğini doğrulayan testler.
+     - **Boş İsim ve Lokasyon Testleri:** Boş isim veya lokasyon ile ürün eklemeye çalışıldığında hatalı işlemin engellendiğini doğrulayan testler.
+     - **Büyük Ölçekli Ürün Yönetimi Testi:** Çok sayıda ürünün eklenip, sorunsuz şekilde takip edilip edilemeyeceğini test eden senaryolar.
+   - Tüm testler `Mocha` ve `Chai` kullanılarak Hardhat ortamında çalıştırılmıştır.
+
+4. **Dağıtım:**
+   - **Test Dağıtımı:** Akıllı kontrat Scroll Testnet'e dağıtıldı.
+   - **Frontend Dağıtımı:** React uygulaması Vercel veya GitHub Pages gibi bir platformda barındırıldı.
 
 ## Projeyi Kurma ve Çalıştırma Talimatları
 
@@ -74,33 +85,6 @@ BlockSupplyTrack ile tedarik zinciri yönetimini blockchain teknolojisi ile devr
    ```
 
 ### Kullanım:
-- **Ürün Ekle:** Ön yüzü kullanarak yeni ürünleri blockchain'e kaydedin.
-- **Lokasyonu Güncelle:** Ürün hareketlerini takip ederek konum ve durumu güncelleyin.
-- **Ürünleri Görüntüle:** Kayıtlı tüm ürünleri ve detaylarını görüntüleyin.
-
-## Testler
-Proje kapsamında, geliştirilen akıllı kontratın işlevselliğini ve güvenilirliğini sağlamak için kapsamlı testler yazılmıştır. Bu testler, farklı senaryolar altında kontratın doğru çalışıp çalışmadığını doğrulamak amacıyla geliştirilmiştir. Testlerin bazıları şunlardır:
-
-1. **Ürün Ekleme Testi:**
-   - Yeni bir ürün eklendiğinde, ürünün doğru şekilde kaydedildiğini doğrulayan test.
-   - Event tetiklenip tetiklenmediğini kontrol eden test.
-
-2. **Ürün Güncelleme Testi:**
-   - Ürünün lokasyonu ve durumunun güncellenmesini doğrulayan test.
-   - Güncelleme sırasında event'in doğru şekilde emit edildiğini kontrol eden test.
-
-3. **Geçersiz İşlemler Testi:**
-   - Var olmayan bir ürünü güncellemeye çalışmanın başarısız olacağını test eden senaryolar.
-   - Aynı lokasyon ve durum ile yapılan güncellemenin başarısız olacağını doğrulayan testler.
-
-4. **Çoklu Ürün Yönetimi Testi:**
-   - Birden fazla ürün ekleyip, her birini ayrı ayrı izleyebilme kapasitesini test eden senaryolar.
-   - Ürünlerin doğru üretici adresleriyle kaydedildiğini doğrulayan testler.
-
-5. **Boş İsim ve Lokasyon Testleri:**
-   - Boş isim veya lokasyon ile ürün eklemeye çalışıldığında hatalı işlemin engellendiğini doğrulayan testler.
-
-6. **Büyük Ölçekli Ürün Yönetimi Testi:**
-   - Çok sayıda ürünün eklenip, sorunsuz şekilde takip edilip edilemeyeceğini test eden senaryolar.
-
-Bu testler, akıllı kontratın güvenilirliğini ve çeşitli durumlar altında nasıl çalıştığını kapsamlı bir şekilde doğrular. Tüm testler `Mocha` ve `Chai` kullanılarak Hardhat ortamında çalıştırılmıştır.
+- **Ürün Ekle:** Ön yüzü kullanarak yeni ürünleri blockchain'e kaydedin. Girdiğiniz ürün adı ve başlangıç lokasyonu blockchain'e kaydedilir.
+- **Lokasyonu Güncelle:** Ürün hareketlerini takip ederek konum ve durumu güncelleyin. Ürün ID'sini girerek, yeni lokasyonu ve durumu belirleyebilirsiniz.
+- **Ürünleri Görüntüle:** Kayıtlı tüm ürünleri ve detaylarını tablo şeklinde görüntüleyin.
