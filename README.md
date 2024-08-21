@@ -4,7 +4,7 @@
 
 ## Kimim:
 - **Ad:** Hami KESKİN
-- **Yetenekler:** Solidity, Ethereum, Scroll Blockchain, React.js
+- **Yetenekler:** Solidity, Ethereum, React.js
 - **E-posta:** hami.kskin@gmail.com
 
 ## Proje Detayları:
