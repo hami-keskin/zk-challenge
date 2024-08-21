@@ -77,3 +77,30 @@ BlockSupplyTrack ile tedarik zinciri yönetimini blockchain teknolojisi ile devr
 - **Ürün Ekle:** Ön yüzü kullanarak yeni ürünleri blockchain'e kaydedin.
 - **Lokasyonu Güncelle:** Ürün hareketlerini takip ederek konum ve durumu güncelleyin.
 - **Ürünleri Görüntüle:** Kayıtlı tüm ürünleri ve detaylarını görüntüleyin.
+
+## Testler
+Proje kapsamında, geliştirilen akıllı kontratın işlevselliğini ve güvenilirliğini sağlamak için kapsamlı testler yazılmıştır. Bu testler, farklı senaryolar altında kontratın doğru çalışıp çalışmadığını doğrulamak amacıyla geliştirilmiştir. Testlerin bazıları şunlardır:
+
+1. **Ürün Ekleme Testi:**
+   - Yeni bir ürün eklendiğinde, ürünün doğru şekilde kaydedildiğini doğrulayan test.
+   - Event tetiklenip tetiklenmediğini kontrol eden test.
+
+2. **Ürün Güncelleme Testi:**
+   - Ürünün lokasyonu ve durumunun güncellenmesini doğrulayan test.
+   - Güncelleme sırasında event'in doğru şekilde emit edildiğini kontrol eden test.
+
+3. **Geçersiz İşlemler Testi:**
+   - Var olmayan bir ürünü güncellemeye çalışmanın başarısız olacağını test eden senaryolar.
+   - Aynı lokasyon ve durum ile yapılan güncellemenin başarısız olacağını doğrulayan testler.
+
+4. **Çoklu Ürün Yönetimi Testi:**
+   - Birden fazla ürün ekleyip, her birini ayrı ayrı izleyebilme kapasitesini test eden senaryolar.
+   - Ürünlerin doğru üretici adresleriyle kaydedildiğini doğrulayan testler.
+
+5. **Boş İsim ve Lokasyon Testleri:**
+   - Boş isim veya lokasyon ile ürün eklemeye çalışıldığında hatalı işlemin engellendiğini doğrulayan testler.
+
+6. **Büyük Ölçekli Ürün Yönetimi Testi:**
+   - Çok sayıda ürünün eklenip, sorunsuz şekilde takip edilip edilemeyeceğini test eden senaryolar.
+
+Bu testler, akıllı kontratın güvenilirliğini ve çeşitli durumlar altında nasıl çalıştığını kapsamlı bir şekilde doğrular. Tüm testler `Mocha` ve `Chai` kullanılarak Hardhat ortamında çalıştırılmıştır.
